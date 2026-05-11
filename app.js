@@ -104,43 +104,23 @@ function renderSectionC(model) {
   ).join("");
   dom.graphUnit.innerHTML = legendItems || (model.graphUnit || `kW · ${model.shortName}`);
 
-  // Si hay asset de vídeo real
+  // Si hay asset de vídeo .mp4 real
   if (model.graph) {
-    // Soporta ambos casos: <video> y <img> en el contenedor de gráfica.
-    const isVideoEl = dom.graphVideo.tagName === "VIDEO";
+    dom.graphVideo.src = model.graph;
+    dom.graphVideo.load();
+    dom.graphVideo.play().catch(() => {});
 
-    if (isVideoEl) {
-      const source = dom.graphVideo.querySelector("source");
-      if (source) source.src = model.graph;
-      else dom.graphVideo.src = model.graph;
-
-      dom.graphVideo.load();
-      dom.graphVideo.play().catch(() => {
-        // En algunos kioscos el autoplay puede estar bloqueado.
-      });
-
-      dom.graphVideo.oncanplay = () => {
-        dom.graphVideo.style.display = "block";
-        dom.graphCanvas.style.display = "none";
-      };
-      dom.graphVideo.onerror = () => {
-        dom.graphVideo.style.display = "none";
-        dom.graphCanvas.style.display = "block";
-        drawPlaceholderChart(dom.graphCanvas, model);
-      };
-    } else {
-      dom.graphVideo.src = model.graph;
+    dom.graphVideo.oncanplay = () => {
       dom.graphVideo.style.display = "block";
       dom.graphCanvas.style.display = "none";
-
-      dom.graphVideo.onerror = () => {
-        dom.graphVideo.style.display = "none";
-        dom.graphCanvas.style.display = "block";
-        drawPlaceholderChart(dom.graphCanvas, model);
-      };
-    }
+    };
+    dom.graphVideo.onerror = () => {
+      dom.graphVideo.style.display = "none";
+      dom.graphCanvas.style.display = "block";
+      drawPlaceholderChart(dom.graphCanvas, model);
+    };
   } else {
-    // Sin vídeo → dibujar gráfica demo con Canvas
+    // Sin vídeo → canvas placeholder hasta recibir los .mp4
     dom.graphVideo.style.display = "none";
     dom.graphCanvas.style.display = "block";
     drawPlaceholderChart(dom.graphCanvas, model);
@@ -248,8 +228,8 @@ function renderSectionAList(model) {
   dom.aBadge.textContent = model.shortName;
   dom.aText.textContent  = model.description;
 
-  const iconOn  = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M4.5 7l2 2 3-3"/></svg>`;
-  const iconOff = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M5 5l4 4M9 5l-4 4"/></svg>`;
+  const iconOn  = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M4.5 7l2 2 3-3"/></svg>`;
+  const iconOff = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M5 5l4 4M9 5l-4 4"/></svg>`;
 
   dom.aBody.innerHTML = model.equipos.map((eq, i) => {
     const on         = isOn(eq.id);
@@ -303,10 +283,24 @@ function setModel(modelId) {
   render();
 }
 
-/** Alterna el estado ON/OFF de un equipo */
+/** Alterna el estado ON/OFF de un equipo — actualiza solo la card afectada */
 function toggleEquip(equipId) {
   state.activeEquip[equipId] = !state.activeEquip[equipId];
-  render();
+  const on = isOn(equipId);
+
+  const card = dom.aBody.querySelector(`[data-equip="${equipId}"]`);
+  if (!card) return;
+
+  card.classList.toggle("card--active", on);
+
+  const label = card.querySelector(".card-label");
+  if (label) {
+    const iconOn  = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M4.5 7l2 2 3-3"/></svg>`;
+    const iconOff = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M5 5l4 4M9 5l-4 4"/></svg>`;
+    label.className = `card-label ${on ? "card-label--on" : "card-label--off"}`;
+    label.setAttribute("aria-label", on ? "Enabled" : "Disabled");
+    label.innerHTML = `${on ? iconOn : iconOff}${on ? "Enabled" : "Disabled"}`;
+  }
 }
 
 

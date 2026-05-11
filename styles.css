@@ -51,15 +51,14 @@
 
   /* Sombras */
   --shadow-card:  0 12px 40px 0 rgba(0,0,0,0.08);
-  --shadow-panel: 0 12px 40px 0 rgba(0,0,0,0.08);
   --shadow-glow:  0 0  40px 0 rgba(48,51,255,0.30);
 
   /* Inner shadows de los paneles / cards (efecto vidrio) */
   --inset-panel:  inset 0px -4px 0px 0px rgba(255,255,255,0.25),
                   inset 1px  2px 0px 0px rgba(255,255,255,1);
   /* Inner shadow de la card activa (neon blue) */
-  --inset-active: inset 0px -4px 0px 0px #acadff,
-                  inset 1px  2px 0px 0px #3033ff;
+  --inset-active: inset 0px -1px 0px 0px #3033ff,
+                  inset 0px  1px 0px 0px #acadff;
 }
 
 /* ── RESET ────────────────────────────────────────────────── */
@@ -91,7 +90,6 @@ html, body {
   grid-template-columns: 3fr 2fr;
   gap: var(--gap);
   min-height: 0;
-  overflow: hidden;
 }
 
 /* Intercambio visual de columnas sin tocar el HTML */
@@ -104,10 +102,11 @@ html, body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-panel), var(--inset-panel);
+  box-shadow: 0 12px 40px 0 rgba(0,0,0,0.08), var(--inset-panel);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: visible;
   padding: 32px 28px;
   gap: 20px;
 }
@@ -117,9 +116,12 @@ html, body {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--panel-dark);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 /* Fila: título "Data Centers" (izq) + logo PE (der) */
@@ -173,13 +175,9 @@ html, body {
 /* ── Cuerpo A (lista de equipos / detalle) ── */
 .a-body {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-right: 4px;
-  scroll-behavior: smooth;
 }
 
 .a-body::-webkit-scrollbar { width: 4px; }
@@ -278,6 +276,10 @@ html, body {
   line-height: 1.5;
 }
 
+.card--active .card-desc {
+  color: #353e44;
+}
+
 
 
 /* ── SECCIÓN DERECHA (ahora columna izquierda: render + gráfica) */
@@ -294,7 +296,6 @@ html, body {
   overflow: hidden;
   position: relative;
   background: var(--render-bg);
-  box-shadow: var(--shadow-panel);
   min-height: 0;
 }
 
@@ -329,7 +330,7 @@ html, body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-panel), var(--inset-panel);
+  box-shadow: 0 12px 40px 0 rgba(0,0,0,0.08), var(--inset-panel);
   padding: 18px 22px;
   display: flex;
   flex-direction: column;
@@ -416,7 +417,8 @@ html, body {
 }
 
 .model-btn {
-  border: 2px solid transparent;
+  position: relative;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--text-500);
   padding: 10px 16px;
@@ -436,17 +438,30 @@ html, body {
   background: rgba(255,255,255,0.18);
 }
 
-/* Botón activo: borde + glow neon blue */
+/* Botón activo: borde gradiente vertical + glow neon blue */
 .model-btn.selected {
-  background: linear-gradient(135deg,
-    rgba(255,255,255,0.30) 0%,
-    rgba(48,51,255,0.06)  100%);
+  border-color: transparent;
+  background: linear-gradient(to right, rgba(255,255,255,0.30), rgba(48,51,255,0.20));
   color: var(--blue);
-  font-weight: 450;   /* Book */
-  border-color: var(--blue);
+  font-weight: 400;
   box-shadow: var(--shadow-glow),
               inset 0px -4px 0px 0px rgba(255,255,255,0.25),
-              inset 1px  2px 0px 0px rgba(255,255,255,0.8);
+              inset 1px  2px 0px 0px rgba(255,255,255,1);
+}
+
+/* Borde degradado vertical sin afectar el relleno */
+.model-btn.selected::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, #ffffff, #3033ff);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 
