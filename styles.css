@@ -65,18 +65,28 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
+  width: 100%;
   height: 100%;
   overflow: hidden;
   font-family: 'Suisse Int\'l', sans-serif;
   background: linear-gradient(180deg, var(--bg-from) 0%, var(--bg-to) 100%);
-  background-attachment: fixed;
   color: var(--text-900);
   -webkit-font-smoothing: antialiased;
 }
 
 /* ── LAYOUT GLOBAL ───────────────────────────────────────── */
+/* Diseño bloqueado a 1920×1080. Se escala uniformemente al viewport
+   con transform: scale() vía la variable --scale (calculada en app.js).
+   Así todo el contenido — renders, gráfica y textos — mantiene
+   proporciones y nada se deforma al redimensionar la ventana. */
 .app {
-  height: 100vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform: translate(-50%, -50%) scale(var(--scale, 1));
+  transform-origin: center center;
   display: grid;
   grid-template-rows: 1fr var(--nav-h);
   gap: var(--gap);
@@ -285,7 +295,8 @@ html, body {
 /* ── SECCIÓN DERECHA (ahora columna izquierda: render + gráfica) */
 .right-col {
   display: grid;
-  grid-template-rows: 1fr minmax(160px, 210px);
+  /* B se dimensiona por su aspect-ratio (16:9). C ocupa el resto. */
+  grid-template-rows: auto 1fr;
   gap: var(--gap);
   min-height: 0;
 }
@@ -296,7 +307,8 @@ html, body {
   overflow: hidden;
   position: relative;
   background: var(--render-bg);
-  min-height: 0;
+  width: 100%;
+  aspect-ratio: 16 / 9;
 }
 
 .render-wrap {
@@ -306,9 +318,11 @@ html, body {
   overflow: hidden;
 }
 
+/* Render 16:9 (img nativa 2048x1152) — ancho al 100% del contenedor, alto derivado de la proporción */
 .render-img {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   object-position: center;
   display: block;
@@ -334,7 +348,8 @@ html, body {
   padding: 18px 22px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  /* gap 5px → el hueco resultante del canvas/img queda en 1065×237 (9:2 exacto) */
+  gap: 5px;
   min-height: 0;
   overflow: hidden;
 }
@@ -386,11 +401,14 @@ html, body {
   display: none;
 }
 
-.graph-canvas {
+.graph-img {
   width: 100%;
   flex: 1;
   min-height: 0;
   border-radius: var(--radius-sm);
+  /* contain: el .mp4/imagen nunca se recorta ni se deforma */
+  object-fit: contain;
+  object-position: center;
   display: block;
 }
 

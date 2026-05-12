@@ -35,7 +35,7 @@ const dom = {
   focusLayer: $("focusLayer"),
   renderTag:  $("renderTag"),
   graphVideo: $("graphVideo"),
-  graphCanvas:$("graphCanvas"),
+  graphImg:   $("graphImg"),
   graphLabel: $("graphLabel"),
   graphUnit:  $("graphUnit"),
   modelNav:   $("modelNav")
@@ -104,121 +104,11 @@ function renderSectionC(model) {
   ).join("");
   dom.graphUnit.innerHTML = legendItems || (model.graphUnit || `kW · ${model.shortName}`);
 
-  // Si hay asset de vídeo .mp4 real
-  if (model.graph) {
-    dom.graphVideo.src = model.graph;
-    dom.graphVideo.load();
-    dom.graphVideo.play().catch(() => {});
-
-    dom.graphVideo.oncanplay = () => {
-      dom.graphVideo.style.display = "block";
-      dom.graphCanvas.style.display = "none";
-    };
-    dom.graphVideo.onerror = () => {
-      dom.graphVideo.style.display = "none";
-      dom.graphCanvas.style.display = "block";
-      drawPlaceholderChart(dom.graphCanvas, model);
-    };
-  } else {
-    // Sin vídeo → canvas placeholder hasta recibir los .mp4
-    dom.graphVideo.style.display = "none";
-    dom.graphCanvas.style.display = "block";
-    drawPlaceholderChart(dom.graphCanvas, model);
-  }
-}
-
-
-// ── GRÁFICA PLACEHOLDER (Canvas API) ─────────────────────
-// Dibuja una curva de área suave como placeholder hasta
-// que el cliente proporcione los .mp4 reales.
-function drawPlaceholderChart(canvas, model) {
-  // Esperar al layout para tener dimensiones reales
-  requestAnimationFrame(() => {
-    const rect = canvas.getBoundingClientRect();
-    canvas.width  = rect.width  * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
-    const ctx = canvas.getContext("2d");
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-
-    const W = rect.width;
-    const H = rect.height;
-
-    // Datos de muestra — 12 puntos (meses)
-    const baseValues = {
-      m1: [32, 35, 45, 52, 48, 60, 72, 68, 55, 63, 70, 65],
-      m2: [55, 62, 70, 82, 78, 90, 96, 92, 85, 88, 94, 90],
-      m3: [20, 28, 42, 58, 65, 78, 85, 80, 62, 50, 35, 22],
-      m4: [15, 18, 22, 25, 28, 30, 32, 31, 28, 24, 20, 16],
-      m5: [80, 84, 88, 90, 92, 95, 98, 96, 93, 91, 88, 85],
-      m6: [40, 44, 50, 56, 60, 65, 68, 66, 62, 58, 52, 46]
-    };
-    const vals = baseValues[model.id] || baseValues.m1;
-    const maxVal = Math.max(...vals);
-    const pad = { top: 20, right: 20, bottom: 28, left: 40 };
-    const chartW = W - pad.left - pad.right;
-    const chartH = H - pad.top  - pad.bottom;
-
-    ctx.clearRect(0, 0, W, H);
-
-    // Grid líneas horizontales
-    ctx.strokeStyle = "rgba(13,20,33,0.08)";
-    ctx.lineWidth = 1;
-    [0.25, 0.5, 0.75, 1].forEach(t => {
-      const y = pad.top + chartH * (1 - t);
-      ctx.beginPath();
-      ctx.moveTo(pad.left, y);
-      ctx.lineTo(pad.left + chartW, y);
-      ctx.stroke();
-    });
-
-    // Puntos de la curva
-    const points = vals.map((v, i) => ({
-      x: pad.left + (i / (vals.length - 1)) * chartW,
-      y: pad.top  + chartH * (1 - v / maxVal)
-    }));
-
-    // Área bajo la curva (relleno con gradiente)
-    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
-    grad.addColorStop(0,   "rgba(27,95,255,0.25)");
-    grad.addColorStop(1,   "rgba(27,95,255,0.02)");
-
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-    for (let i = 1; i < points.length; i++) {
-      const cpx = (points[i-1].x + points[i].x) / 2;
-      ctx.bezierCurveTo(cpx, points[i-1].y, cpx, points[i].y, points[i].x, points[i].y);
-    }
-    ctx.lineTo(points[points.length-1].x, pad.top + chartH);
-    ctx.lineTo(points[0].x, pad.top + chartH);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    // Línea de la curva
-    ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-    for (let i = 1; i < points.length; i++) {
-      const cpx = (points[i-1].x + points[i].x) / 2;
-      ctx.bezierCurveTo(cpx, points[i-1].y, cpx, points[i].y, points[i].x, points[i].y);
-    }
-    ctx.strokeStyle = "rgba(27,95,255,0.8)";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([]);
-    ctx.stroke();
-
-    // Eje X: etiquetas de meses
-    const meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-    ctx.fillStyle = "rgba(13,20,33,0.35)";
-    ctx.font = "10px 'Suisse Int\\'l', sans-serif";
-    ctx.textAlign = "center";
-    points.forEach((p, i) => {
-      ctx.fillText(meses[i], p.x, H - 6);
-    });
-
-    // Eje Y: valor máximo
-    ctx.textAlign = "right";
-    ctx.fillText(maxVal + " kW", pad.left - 6, pad.top + 4);
-  });
+  // Placeholder SVG de color sólido por modelo (2160×480, 9:2).
+  // Cuando lleguen los .mp4 reales, devolver al flujo de video.
+  dom.graphVideo.style.display = "none";
+  dom.graphImg.style.display = "block";
+  dom.graphImg.src = `./assets/graphs/${model.id}.png`; /* TODO CHANGE THE NAMES OF PLACEHOLDER BCS MODEL IS "m(n).svg" al png*/
 }
 
 
@@ -329,6 +219,17 @@ document.addEventListener("click", (ev) => {
   }
 
 });
+
+
+// ── ESCALADO UNIFORME 1920×1080 ──────────────────────────
+// Calcula el factor que hace caber el diseño en el viewport
+// sin deformar. CSS aplica transform: scale(var(--scale)).
+function fitToViewport() {
+  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  document.documentElement.style.setProperty("--scale", scale);
+}
+window.addEventListener("resize", fitToViewport);
+fitToViewport();
 
 
 // ── INICIALIZACIÓN ────────────────────────────────────────

@@ -18,7 +18,7 @@ const MODELS = [
     shortName: "Line Interactive",
     description: "Solución modular de entrada diseñada para cargas de trabajo convencionales. Ofrece alta disponibilidad con un balance óptimo entre coste y rendimiento, ideal para empresas que dan sus primeros pasos en infraestructura crítica.",
     render: "./assets/renders/m1.webp",
-    graph: "./assets/graphs/m1.mp4",
+    graph: "./assets/graphs/m1.mp4", /* TODO CHANGE THIS GRAPH FOR MP4 LOOP video*/
     graphLabel: "Eficiencia energética",
     graphUnit: "PUE · Line Interactive",
     legend: [
