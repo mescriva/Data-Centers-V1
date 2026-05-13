@@ -124,7 +124,6 @@ function renderSectionAList(model) {
   dom.aBody.innerHTML = model.equipos.map((eq, i) => {
     const on         = isOn(eq.id);
     const cardActive = on ? "card--active" : "";
-    const labelClass = on ? "card-label--on" : "card-label--off";
     const labelText  = on ? "Enabled" : "Disabled";
     const labelIcon  = on ? iconOn : iconOff;
 
@@ -137,8 +136,6 @@ function renderSectionAList(model) {
         <!-- Fila superior: nombre + label estado -->
         <div class="card-top">
           <div class="card-title">${eq.title}</div>
-          <span class="card-label ${labelClass}" aria-label="${labelText}">
-            ${labelIcon}${labelText}
           </span>
         </div>
 
