@@ -295,8 +295,8 @@ html, body {
 /* ── SECCIÓN DERECHA (ahora columna izquierda: render solo */
 .right-col {
   display: grid;
-  /* B  ocupará 2/3 de la pantalla y 1/3 será para info y gráfica*/
-  grid-template-rows: 2fr 1fr;
+  /* B  ocupará la totalidad de la columna izquierda, con tamaño fijo*/
+  grid-template-rows: 1fr;
   gap: var(--gap);
   min-height: 0;
 }
@@ -317,6 +317,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  min-height: 0;
 }
 
 /* Render 16:9 (img nativa 2048x1152) — ancho al 100% del contenedor, alto derivado de la proporción */
