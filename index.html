@@ -31,7 +31,22 @@
         <!-- Cuerpo intercambiable: lista de equipos o detalle de uno -->
         <div class="a-body" id="aBody"></div>
 
+        <!-- SECCIÓN C — Gráfica / video en bucle -->
+        <section class="section-c" id="sectionC" aria-label="Gráfica del data center">
+          <div class="graph-header">
+            <span class="graph-label" id="graphLabel">Rendimiento energético</span>
+            <span class="graph-unit justify-content-right" id="graphUnit">kW · Line Interactive</span>
+          </div>
+          <!-- Video loop (reemplazar src con el .mp4 real) TODO -->
+          <video class="graph-video" id="graphVideo" autoplay loop muted playsinline></video>
+          <!-- Imagen placeholder de la gráfica (2160×480, 9:2) — sustituir por video final -->
+          <img class="graph-img" id="graphImg" src="" alt="Gráfica del modelo activo" />
+        </section>
+
+      </section><!-- /right-col -->
       </aside>
+
+      
 
       <!-- ─── DERECHA (2/3): B arriba, C abajo ─── -->
       <section class="right-col">
@@ -62,20 +77,6 @@
             <div class="render-tag" id="renderTag">Line Interactive</div>
           </div>
         </section>
-
-        <!-- SECCIÓN C — Gráfica / video en bucle -->
-        <section class="section-c" id="sectionC" aria-label="Gráfica del data center">
-          <div class="graph-header">
-            <span class="graph-label" id="graphLabel">Rendimiento energético</span>
-            <span class="graph-unit justify-content-right" id="graphUnit">kW · Line Interactive</span>
-          </div>
-          <!-- Video loop (reemplazar src con el .mp4 real) TODO -->
-          <video class="graph-video" id="graphVideo" autoplay loop muted playsinline></video>
-          <!-- Imagen placeholder de la gráfica (2160×480, 9:2) — sustituir por video final -->
-          <img class="graph-img" id="graphImg" src="" alt="Gráfica del modelo activo" />
-        </section>
-
-      </section><!-- /right-col -->
 
     </main><!-- /main -->
 

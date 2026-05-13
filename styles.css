@@ -308,7 +308,7 @@ html, body {
   position: relative;
   background: var(--render-bg);
   width: 100%;
-  aspect-ratio: 16 / 9;
+  
 }
 
 .render-wrap {
