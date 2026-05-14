@@ -202,8 +202,9 @@ html, body {
   align-items: start; 
   display: grid;
   width: 100%;
-  padding: 12px; /*espacio general entre el contenido de cada equipo*/
-  padding-left: 0; /* para no tener espacio a la izquierda y conseguir una alineación correcta con los titulos y la descripción principal del datacenter*/
+  padding:0;   /* para no tener espacio a la izquierda y conseguir una alineación correcta con los titulos y la descripción principal del datacenter*/
+  padding-bottom: 8px; /*espacio general entre el contenido de cada equipo*/
+  padding-top: 8px;
   grid-template-columns: 150px 1fr; /* 2 columnas: título+label, descripción */
   column-gap: 32px; /* espacio entre título y descripción */;
   border-bottom: 1px solid var(--panel-dark); /* línea sutil para separar cards */
