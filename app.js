@@ -29,6 +29,7 @@ const $ = id => document.getElementById(id);
 
 const dom = {
   aText:      $("aText"),
+  aText2:     $("aText2"),
   aBadge:     $("aBadge"),
   aBody:      $("aBody"),
   renderImg:  $("renderImg"),
@@ -117,6 +118,7 @@ function renderSectionAList(model) {
   // Cabecera: subtítulo (shortName del modelo) + descripción
   dom.aBadge.textContent = model.shortName;
   dom.aText.textContent  = model.description;
+  dom.aText2.textContent  = model.description2;
 
   const iconOn  = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M4.5 7l2 2 3-3"/></svg>`;
   const iconOff = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M5 5l4 4M9 5l-4 4"/></svg>`;
