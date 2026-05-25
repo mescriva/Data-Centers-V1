@@ -1,30 +1,12 @@
 // ═══════════════════════════════════════════════════════════
-//  DATA CENTERS — app.js
-//  Lógica de interacción del MVP.
-//  ─────────────────────────────────────────────────────────
-//  Flujo principal:
-//    1. Usuario elige modelo en Sección D   → setModel()
-//    2. Usuario activa switch en card       → toggleEquip()
-//    3. Usuario pulsa flecha de detalle     → openDetail()
-//    4. Usuario pulsa ← volver             → closeDetail()
-//
-//  Sin frameworks. Sin bundler. Vanilla JS con módulos
-//  simulados (variables globales desde data.js cargado antes).
-//
-//  IMPORTANTE: data.js debe cargarse ANTES que este archivo
-//  (ver orden de <script> en index.html)
+//  DATA CENTERS — app.js 
 // ═══════════════════════════════════════════════════════════
 
-
-// ── ESTADO GLOBAL ─────────────────────────────────────────
-// Todo el estado de la UI vive aquí. Sencillo y depurable.
 const state = {
-  modeloId:    MODELS[0].id,  // modelo seleccionado por defecto
-  activeEquip: {}             // { [equipId]: boolean }  ON/OFF
+  modeloId:    MODELS[0].id,
+  activeEquip: {}
 };
 
-
-// ── REFERENCIAS DOM (caché para no buscar en cada render) ──
 const $ = id => document.getElementById(id);
 
 const dom = {
@@ -32,28 +14,84 @@ const dom = {
   aText2:     $("aText2"),
   aBadge:     $("aBadge"),
   aBody:      $("aBody"),
-  renderVideo:  $("renderVideo"),
-  graphVideo: $("graphVideo"),
-  graphImg:   $("graphImg"),
   graphLabel: $("graphLabel"),
   graphUnit:  $("graphUnit"),
-  modelNav:   $("modelNav")
+  graphImg:   $("graphImg"),
+  modelNav:   $("modelNav"),
+  renderWrap: $("renderWrap")
 };
+
+// ── MAPA DE VÍDEOS PRECARGADOS ────────────────────────────
+// videoMap[modelId] = elemento <video> listo para mostrar
+const videoMap = {};
+
+function preloadAllVideos() {
+  MODELS.forEach(model => {
+    const src = model.render || "";
+    const video = document.createElement("video");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("loop", "");
+    video.setAttribute("muted", "");
+    video.setAttribute("playsinline", "");
+    video.style.cssText = [
+      "position:absolute",
+      "inset:0",
+      "width:100%",
+      "height:100%",
+      "object-fit:contain",
+      "object-position:center",
+      "opacity:0",
+      "transition:opacity 0.25s ease",
+      "pointer-events:none"
+    ].join(";");
+
+    if (src) {
+      video.src = src;
+      video.load();
+      // Arranca reproducción en cuanto hay datos mínimos
+      video.addEventListener("canplay", () => {
+        video.play().catch(() => {});
+      }, { once: true });
+    }
+
+    dom.renderWrap.appendChild(video);
+    videoMap[model.id] = video;
+  });
+}
+
+function showVideo(modelId) {
+  // Oculta todos y muestra el del modelo activo — sin await, sin canplay
+  Object.entries(videoMap).forEach(([id, video]) => {
+    video.style.opacity = id === modelId ? "1" : "0";
+  });
+  // Asegura que esté reproduciendo (puede haberse pausado)
+  const active = videoMap[modelId];
+  if (active && active.paused) {
+    active.play().catch(() => {});
+  }
+}
+
+// ── MAPA DE IMÁGENES PRECARGADAS ──────────────────────────
+const graphMap = {};
+
+function preloadAllGraphs() {
+  MODELS.forEach(model => {
+    const img = new Image();
+    img.src = `./assets/graphs/${model.id}.png`;
+    graphMap[model.id] = img;
+  });
+}
 
 
 // ── HELPERS ────────────────────────────────────────────────
-
-/** Devuelve el objeto modelo activo */
 function getModel() {
   return MODELS.find(m => m.id === state.modeloId);
 }
 
-/** Devuelve true si el equipo está activo (switch ON) */
 function isOn(equipId) {
   return Boolean(state.activeEquip[equipId]);
 }
 
-/** Inicializa el estado de switches para un modelo (solo la primera vez) */
 function initEquipState(model) {
   model.equipos.forEach(eq => {
     if (state.activeEquip[eq.id] === undefined) {
@@ -63,103 +101,29 @@ function initEquipState(model) {
 }
 
 
-// ── RENDER: SECCIÓN D (navbar modelos) ────────────────────
+// ── SECCIÓN D ─────────────────────────────────────────────
 function renderSectionD() {
   dom.modelNav.innerHTML = MODELS.map(m => {
     const sel = m.id === state.modeloId ? "selected" : "";
-    return `<button class="model-btn ${sel}" data-action="setModel" data-model="${m.id}">
+    return `<button class="model-btn ${sel}"
+                    data-action="setModel"
+                    data-model="${m.id}">
               ${m.shortName}
             </button>`;
   }).join("");
 }
 
-// ── ESTADO DEL PLAYER DUAL ────────────────────────────────
-const player = {
-  active: null,   // el elemento <video> que está visible ahora
-  back:   null,   // el elemento <video> que precarga en segundo plano
-};
 
-// Inicializa los dos elementos después de que el DOM esté listo
-function initPlayer() {
-  player.active = document.getElementById("renderVideoA");
-  player.back   = document.getElementById("renderVideoB");
-}
-
-// ── RENDER: SECCIÓN B ─────────────────────────────────────
-const FALLBACK_SRC = "./assets/renders/line_interactive.mp4";
-
+// ── SECCIÓN B ─────────────────────────────────────────────
 function renderSectionB(model) {
-  const src = (model.render && model.render.endsWith(".mp4"))
-    ? model.render
-    : FALLBACK_SRC;
-
-  // Si el video activo ya tiene este src, no hacer nada
-  if (player.active.getAttribute("src") === src) return;
-
-  // 1. Carga el nuevo src en el video de fondo (ya estaba oculto)
-  player.back.setAttribute("src", src);
-  player.back.load();
-
-  // 2. En cuanto tenga datos suficientes para reproducir, hace el swap
-  player.back.oncanplay = () => {
-    player.back.play().catch(() => {});
-
-    // Swap de opacidades: back sube a 1, active baja a 0
-    player.back.style.opacity  = "1";
-    player.active.style.opacity = "0";
-
-    // Tras la transición, limpia el video que quedó atrás
-    setTimeout(() => {
-      player.active.pause();
-      player.active.removeAttribute("src");
-      player.active.load();
-      player.active.style.opacity = "0";
-
-      // Intercambia los roles para el próximo cambio
-      [player.active, player.back] = [player.back, player.active];
-    }, 650); // ligeramente mayor que la transición CSS (0.6s)
-
-    player.back.oncanplay = null; // limpia el listener
-  };
+  showVideo(model.id);
 }
 
 
-/*
-// ── RENDER: SECCIÓN B (render fijo) ───────────────────────
-const RENDER_SRC = "./assets/renders/line_interactive.mp4";  TODO CHANGE THIS FOR MP4 LOOP video
-
-function renderSectionB(model) {
-  const FALLBACK = "./assets/renders/line_interactive.mp4";
-  const src = (model.render && model.render.endsWith(".mp4"))
-    ? model.render
-    : FALLBACK;
-
-  if (dom.renderVideo.getAttribute("src") !== src) {
-    dom.renderVideo.setAttribute("src", src);
-
-    dom.renderVideo.load();
-
-   // TRUCO DE REINICIO ANTICIPADO:
-    // Forzamos el rebobinado manual un instante antes de terminar el archivo
-    dom.renderVideo.addEventListener("timeupdate", function() {
-      const buffer = 0.05; // Margen de error en segundos (puedes ajustar a 0.1 si sigue fallando)
-      if (this.currentTime >= this.duration - buffer) {
-        this.currentTime = 0;
-        this.play().catch(() => {});
-      }
-    });
-
-    dom.renderVideo.play().catch(() => {});
-  }
-  
-}
-*/
-
-
-// ── RENDER: SECCIÓN C (gráfica / video) ───────────────────
+// ── SECCIÓN C ─────────────────────────────────────────────
 function renderSectionC(model) {
-  // Actualizar etiqueta y leyenda
   dom.graphLabel.textContent = model.graphLabel || "Rendimiento energético";
+
   const legendItems = (model.legend || []).map(item =>
     `<span class="graph-legend-item">
        <span class="graph-legend-dot" style="background:${item.color}"></span>
@@ -168,59 +132,43 @@ function renderSectionC(model) {
   ).join("");
   dom.graphUnit.innerHTML = legendItems || (model.graphUnit || `kW · ${model.shortName}`);
 
-  // Placeholder SVG de color sólido por modelo (2160×480, 9:2).
-  // Cuando lleguen los .mp4 reales, devolver al flujo de video.
-  // el naming para recorrer el ARRAY y pintar cada img debe ser m + (id) + .png  dom.graphVideo.style.display = "none";
-  dom.graphImg.style.display = "block";
-  dom.graphImg.src = `./assets/graphs/${model.id}.png`; /* TODO CHANGE THE NAMES OF PLACEHOLDER BCS MODEL IS "m(n).svg" al png*/
+  // Swap instantáneo: reemplaza el elemento en el DOM por el precargado
+  const cached = graphMap[model.id];
+  if (cached) {
+    cached.className = "graph-img";
+    cached.alt = "Gráfica del modelo activo";
+    dom.graphImg.replaceWith(cached);
+    dom.graphImg = cached;           // actualiza la referencia
+  }
 }
 
 
-// ── RENDER: SECCIÓN A — LISTADO DE EQUIPOS ────────────────
+// ── SECCIÓN A ─────────────────────────────────────────────
 function renderSectionAList(model) {
-  // Cabecera: subtítulo (shortName del modelo) + descripción
   dom.aBadge.textContent = model.shortName;
   dom.aText.textContent  = model.description;
-  dom.aText2.textContent  = model.description2;
-
-  const iconOn  = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M4.5 7l2 2 3-3"/></svg>`;
-  const iconOff = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M5 5l4 4M9 5l-4 4"/></svg>`;
+  dom.aText2.textContent = model.description2;
 
   dom.aBody.innerHTML = model.equipos.map((eq, i) => {
-    const on         = isOn(eq.id);
-    const cardActive = on ? "card--active" : "";
-    /* const labelText  = on ? "Enabled" : "Disabled";
-    const labelIcon  = on ? iconOn : iconOff;  de momento no hay interaccion*/
-
+    const on = isOn(eq.id);
     return `
-      <article class="card ${cardActive} anim-fade"
+      <article class="card ${on ? "card--active" : ""} anim-fade"
                data-equip="${eq.id}"
                data-action="toggle"
-               style="animation-delay: ${i * 0.06}s">
-
-        <!-- columna izquierda: 312px titulo + label estado -->
+               style="animation-delay:${i * 0.06}s">
         <div class="card-left">
           <div class="card-title">${eq.title}</div>
-          </span>
         </div>
-
-        <!-- columna derecha 1fr: descripción -->
         <div class="card-desc">${eq.short}</div>
-      </article>
-    `;
+      </article>`;
   }).join("");
 }
-
-
 
 
 // ── RENDER GLOBAL ─────────────────────────────────────────
 function render() {
   const model = getModel();
   initEquipState(model);
-
-  // Inicializa el player solo la primera vez
-  if (!player.active) initPlayer();
 
   renderSectionD();
   renderSectionB(model);
@@ -230,64 +178,40 @@ function render() {
 
 
 // ── ACCIONES ──────────────────────────────────────────────
-
-/** Cambia el modelo activo */
 function setModel(modelId) {
   state.modeloId = modelId;
   render();
 }
 
-/** Alterna el estado ON/OFF de un equipo — actualiza solo la card afectada */
 function toggleEquip(equipId) {
   state.activeEquip[equipId] = !state.activeEquip[equipId];
   const on = isOn(equipId);
-
   const card = dom.aBody.querySelector(`[data-equip="${equipId}"]`);
-  if (!card) return;
-
-  card.classList.toggle("card--active", on);
-
-  const label = card.querySelector(".card-label");
-  if (label) {
-    const iconOn  = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M4.5 7l2 2 3-3"/></svg>`;
-    const iconOff = `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="5.5"/><path d="M5 5l4 4M9 5l-4 4"/></svg>`;
-    label.className = `card-label ${on ? "card-label--on" : "card-label--off"}`;
-    label.setAttribute("aria-label", on ? "Enabled" : "Disabled");
-    label.innerHTML = `${on ? iconOn : iconOff}${on ? "Enabled" : "Disabled"}`;
-  }
+  if (card) card.classList.toggle("card--active", on);
 }
 
 
-// ── DELEGACIÓN DE EVENTOS ─────────────────────────────────
-// Listener único para toda la interacción. Soporta tanto
-// botones como la card completa (data-action en article).
+// ── EVENTOS ───────────────────────────────────────────────
 document.addEventListener("click", (ev) => {
   const target = ev.target.closest("[data-action]");
   if (!target) return;
 
-  const action = target.dataset.action;
-
-  // ① Cambiar modelo (Sección D)
-  if (action === "setModel") {
+  if (target.dataset.action === "setModel") {
     const modelId = target.dataset.model;
     if (modelId) setModel(modelId);
     return;
   }
 
-  // ② Activar/desactivar equipo (card completa o switch en detalle)
-  if (action === "toggle") {
+  if (target.dataset.action === "toggle") {
     const card    = target.closest("[data-equip]") ?? target;
     const equipId = target.dataset.equip || card.dataset.equip;
     if (equipId) toggleEquip(equipId);
     return;
   }
-
 });
 
 
-// ── ESCALADO UNIFORME 1920×1080 ──────────────────────────
-// Calcula el factor que hace caber el diseño en el viewport
-// sin deformar. CSS aplica transform: scale(var(--scale)).
+// ── ESCALADO 1920×1080 ────────────────────────────────────
 function fitToViewport() {
   const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
   document.documentElement.style.setProperty("--scale", scale);
@@ -296,6 +220,8 @@ window.addEventListener("resize", fitToViewport);
 fitToViewport();
 
 
-// ── INICIALIZACIÓN ────────────────────────────────────────
-// Llamada inicial que pinta toda la UI con el modelo 1.
+// ── INIT ──────────────────────────────────────────────────
+// Primero precarga todos los vídeos, luego pinta la UI
+preloadAllVideos();
+preloadAllGraphs();
 render();
