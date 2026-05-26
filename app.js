@@ -29,10 +29,10 @@ function preloadAllVideos() {
   MODELS.forEach(model => {
     const src = model.render || "";
     const video = document.createElement("video");
-    video.setAttribute("autoplay", "");
     video.setAttribute("loop", "");
     video.setAttribute("muted", "");
     video.setAttribute("playsinline", "");
+    video.setAttribute("preload", "auto");
     video.style.cssText = [
       "position:absolute",
       "inset:0",
@@ -48,10 +48,6 @@ function preloadAllVideos() {
     if (src) {
       video.src = src;
       video.load();
-      // Arranca reproducción en cuanto hay datos mínimos
-      video.addEventListener("canplay", () => {
-        video.play().catch(() => {});
-      }, { once: true });
     }
 
     dom.renderWrap.appendChild(video);
@@ -221,7 +217,27 @@ fitToViewport();
 
 
 // ── INIT ──────────────────────────────────────────────────
-// Primero precarga todos los vídeos, luego pinta la UI
 preloadAllVideos();
 preloadAllGraphs();
-render(); 
+render();
+
+// Arranca el vídeo del modelo inicial en cuanto hay datos suficientes
+(function startInitialVideo() {
+  const video = videoMap[state.modeloId];
+  if (!video || !video.src) return;
+
+  function playIt() {
+    video.play().catch(() => {
+      // Navegador bloqueó autoplay: primer clic en cualquier zona lo desbloquea
+      document.addEventListener("click", () => video.play().catch(() => {}), { once: true });
+    });
+  }
+
+  // readyState 0 ó 1 → todavía no hay datos, esperamos canplay
+  // readyState 2, 3, 4 → ya hay datos, intentamos directo
+  if (video.readyState >= 2) {
+    playIt();
+  } else {
+    video.addEventListener("canplay", playIt, { once: true });
+  }
+})();
