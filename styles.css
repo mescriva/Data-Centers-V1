@@ -291,9 +291,10 @@ html, body {
 .right-col {
   display: grid;
   /* B  ocupará la totalidad de la columna izquierda, con tamaño fijo*/
-  grid-template-rows: 1fr;
+  grid-template-rows: auto ;
   gap: var(--gap);
   min-height: 0;
+  
 }
 
 /* ── SECCIÓN B — Render ──────────────────────────────────── */
@@ -301,26 +302,26 @@ html, body {
   border-radius: var(--radius-md);
   overflow: hidden;
   position: relative;
-  background: var(--render-bg);
   width: 100%;
   height: 100%;
   min-height: 0;
+  border-radius: 20px;
 }
 
 .section-index{
-  position: absolute;
+  /* position: absolute;
   top: 28px;
   left: 28px;
-  z-index: 10;
+  z-index: 10; */
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 12px 18px;
-  background: rgba(255, 255, 255, 0.18);
+  padding: 20px 28px;
+  background: var(--surface);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--inset-panel);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card), var(--inset-panel);
 }
 .index-title {
   font-family: 'Suisse Int\'l', sans-serif;
@@ -348,7 +349,13 @@ html, body {
 }
 
  AÑADIR: los dos videos apilados, con transición de opacidad */
-.render-wrap { position: relative; width: 100%; height: 100%; }
+.render-wrap { 
+  position: relative; 
+  width: 100%; 
+  height: 100%; 
+  border-radius: 20px;
+  overflow: hidden;
+}
 
 .render-video {
   position: absolute;
@@ -358,6 +365,7 @@ html, body {
   object-fit: contain;
   object-position: center;
   transition: opacity 0.6s ease;
+  overflow: hidden;
 }
 
 /* el video de fondo empieza invisible */
