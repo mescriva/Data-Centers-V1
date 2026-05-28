@@ -101,10 +101,10 @@ Para adaptar colores a la identidad visual de la empresa, edita las variables en
 
 ```css
 :root {
-  --blue:       #1b5fff;   /* Color corporativo principal */
-  --panel:      #f2f4f7;   /* Fondo panel izquierdo (gris 01) */
-  --bg:         #e8ecf2;   /* Fondo general */
-  --text-900:   #0d1421;   /* Texto principal */
-  --render-bg:  #c8d2e0;   /* Fondo de la zona de render */
+  --neonBlue500: #3033FF;   /* Color corporativo principal */
+  --panel:      #D0d8dd;   /* Fondo panel izquierdo (gris 01)   */
+  --bg:         #f5f5f5;   /* Fondo general gris 00 */
+  --gris07:     #101214;   /* Texto principal */
+  --render-bg:  #b9c1c7;   /* Fondo de la zona de render gris02*/
 }
 ```

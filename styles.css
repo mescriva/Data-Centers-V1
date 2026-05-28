@@ -19,30 +19,36 @@
   --surface:       rgba(255,255,255,0.90);
   --surface-hover: rgba(255,255,255,1.00);
 
-  /* Texto */
-  --text-900: #101214;   /* gris-07 */
-  --text-700: #353e44;   /* gris-05 */
-  --text-600: #505D68;   /* gris-04 */
-  --text-500: #505D68;   /* gris-03 es #83919f pero repito el 04 por asegurar bugs*/
-  --text-300: #b9c1c7;   /* gris-02 */
+  /* Colores base gris */
+
+  --gris00: #f5f5f5; /* gris 00 */
+  --gris01: #D0d8dd; /* gris 01 */
+  --gris02: #b9c1c7; /* gris 02 */
+  --gris03: #83919f; /* gris 03 */
+  --gris04: #505D68; /* gris 04 */
+  --gris05: #353e44; /* gris 05 */
+  --gris06:#1F2428; /* gris 06 */
+  --gris07:#101214; /* gris 07 */
+  --negro: #000000; /* negro */
+  --blanco: #FFFFFF; /* blanco */
 
 
-  /* Neon blue */
-  --blue:       #3033ff;
-  --blue-100:   #d6d6ff;
-  --blue-200:   #acadff;
-  --blue-light: rgba(214,214,255,0.50);
-  --blue-glow:  rgba(48,51,255,0.30);
-  --blue-btn:   #3033ff;
-
+  /* Colores Neon blue */
+  --neonBlue100: #D6D6FF;
+  --neonBlue200: #ACADFF;
+  --neonBlue300: #8385FF;
+  --neonBlue400: #595CFF;
+  --neonBlue500: #3033FF;
+  --neonBlue600: #2629CC;
+  --neonBlue700: #1D1F99;
+  --neonBlue800: #131466;
+  --neonBlue900: #0A0A33;
+  
   /* Color labels grafica */
-
-
---label-blue: "#3033ff"; /* neon blue 500 */
---label-orange: "#FF8300"; /* orange 500 */
---label-green: "#97d700"; /* mobility green 500*/
---label-yellow: "#FFEC00"; /* yellow 500 */
-
+  --orange500: #FF8300;
+  --mobilityGreen500: #97D700;
+  --yellow500: #FFEC00;
+  
   /* Render (zona B) */
   --render-bg: #c8d2e0;
 
@@ -80,7 +86,7 @@ html, body {
   overflow: hidden;
   font-family: 'Suisse Int\'l', sans-serif;
   background: linear-gradient(180deg, var(--bg-from) 0%, var(--bg-to) 100%);
-  color: var(--text-900);
+  color: var(--gris07);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -157,7 +163,7 @@ html, body {
   font-weight: 450;   /* Book */
   font-size: 30px;
   line-height: 1.05;
-  color: var(--text-900);
+  color: var(--gris07);
 }
 
 .a-logo {
@@ -173,7 +179,7 @@ html, body {
   font-weight: 430;  
   font-size: 20px;
   letter-spacing: 0;
-  color: var(--text-900);
+  color: var(--gris07);
   border: none;
   padding-top: 32px;
   padding-bottom: 8px;
@@ -186,7 +192,7 @@ html, body {
 .a-text {
   font-size: 12.5px;
   line-height: 1.65;
-  color: var(--text-600); /* gris-04 para el texto descriptivo */
+  color: var(--gris04); /* gris-04 para el texto descriptivo */
   font-weight: 400;
   transition: opacity 0.3s;
   margin-top: 4px;
@@ -228,7 +234,7 @@ html, body {
 .card-desc {
   font-size: 12.5px;
   line-height: 1.4;
-  color: var(--text-600);
+  color: var(--gris04);
   font-weight: 400;
   min-width: 0;
   white-space: wrap;
@@ -245,7 +251,7 @@ html, body {
   font-family: 'Suisse Int\'l', sans-serif;
   font-weight: 400;   /* Book */
   font-size: 14px;
-  color: var(--text-900);
+  color: var(--gris07);
   white-space: normal; /* no wrap para el titulo en 1 sola linea */
 /*  overflow: hidden;
   text-overflow: ellipsis; 
@@ -341,7 +347,7 @@ html, body {
   font-family: 'Suisse Int\'l', sans-serif;
   /* font-weight: 450;    Book */
   font-size: 20px;
-  color: var(--text-600);
+  color: var(--gris04);
 }
 
 .graph-unit {
@@ -349,7 +355,7 @@ html, body {
   align-items: center;
   gap: 14px;
   font-size: 12px;
-  color: var(--text-600);
+  color: var(--gris04);
 }
 
 .graph-legend-item {
@@ -357,7 +363,7 @@ html, body {
   align-items: center;
   gap: 5px;
   font-size: 11px;
-  color: var(--text-600);
+  color: var(--gris04);
   white-space: nowrap;
 }
 
@@ -414,7 +420,7 @@ html, body {
   position: relative;
   border: 1px solid transparent;
   background: transparent;
-  color: var(--text-600);
+  color: var(--gris04);
   padding: 10px 16px;
   border-radius: var(--radius-pill);
   font-family: 'Suisse Int\'l', sans-serif;
@@ -428,7 +434,7 @@ html, body {
 }
 
 .model-btn:hover:not(.selected) {
-  color: var(--text-600);
+  color: var(--gris04);
   background: rgba(255,255,255,0.18);
 }
 
@@ -436,7 +442,7 @@ html, body {
 .model-btn.selected {
   border-color: transparent;
   background: linear-gradient(to right, rgba(255,255,255,0.30), rgba(48,51,255,0.20));
-  color: var(--blue);
+  color: var(--neonBlue500);
   font-weight: 400;
   box-shadow: var(--shadow-glow),
               inset 0px -4px 0px 0px rgba(255,255,255,0.25),
