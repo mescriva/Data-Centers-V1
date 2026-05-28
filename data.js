@@ -224,20 +224,20 @@ const MODELS = [
       },
       {
         id: "m6-noc",
-        title: "XMV670 & XMV670K",
-        short: "Controls cooling systems with precise medium-voltage motor management.",
-        long: "Controls cooling systems with precise medium-voltage motor management.",
+        title: "XMV670 & XMV670K  SD750FR",
+        short: "Controls cooling systems with precise medium-voltage motor management. Controls auxiliary pumps and fans for efficient facility operation.",
+        long: "Controls cooling systems with precise medium-voltage motor management. Controls auxiliary pumps and fans for efficient facility operation.",
         schemeImg: "./assets/schemes/m6.png",
         focus: { x: 45, y: 20 }
-      },
-      {
+      }
+      /* {
         id: "m6-smartpdu",
         title: "SD750FR",
         short: "Controls auxiliary pumps and fans for efficient facility operation.",
         long: "Controls auxiliary pumps and fans for efficient facility operation.",
         schemeImg: "./assets/schemes/m6.png",
         focus: { x: 80, y: 65 }
-      }
+      } */
     ]
   }
 
