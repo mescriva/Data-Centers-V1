@@ -114,6 +114,10 @@ function renderSectionD() {
 // ── SECCIÓN B ─────────────────────────────────────────────
 function renderSectionB(model) {
   showVideo(model.id);
+  const sub = document.getElementById("indexSubtitle");
+  if(sub){
+    sub.textContent = model.shortName;
+  }
 }
 
 
