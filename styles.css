@@ -48,7 +48,35 @@
   --orange500: #FF8300;
   --mobilityGreen500: #97D700;
   --yellow500: #FFEC00;
+
+  /* Tamaños de textos*/
+  --title-title: 40px; /* Title / Title en Master UI 80px*/
+  --title-subtitle: 28px; /* Title / Subtitle en Master UI 48px*/
+  --body-body-XS: 16px; /* Body / Body XS */
+  --body-body-S: 24px; /* Body / Body S */
+  --body-body-M: 36px; /* Body / Body M */
   
+  /* Design System UI*/
+  --display-display-S: 18px; /* Master UI / Display / Display S*/
+  --display-display-M: 24px; /* Master UI / Display / Display M*/
+  --display-display-L: 36px; /* Master UI / Display / Display L*/
+
+  --headline-headline-S: 16px; /* Master UI / Headline / Headline S*/
+  --headline-headline-M: 18px; /* Master UI / Headline / Headline M*/
+  --headline-headline-L: 24px; /* Master UI / Headline / Headline L*/
+
+  --title-title-S: 12px; /* Master UI / Title / Title S*/
+  --title-title-M: 16px; /* Master UI / Title / Title M*/
+  --title-title-L: 18px; /* Master UI / Title / Title L*/
+  --title-title-link-S: 12px , underline; /* Master UI / Title / Title Link S*/
+  --title-title-link-M: 16px , underline; /* Master UI / Title / Title Link M*/
+  --title-title-link-L: 18px , underline; /* Master UI / Title / Title Link L*/
+
+  /* Pesos de la tipografía  están por generar en Master UI*/
+  --font-weight-book: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
   /* Render (zona B) */
   --render-bg: #c8d2e0;
 
@@ -85,7 +113,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: 'Suisse Int\'l', sans-serif;
-  background: linear-gradient(180deg, var(--bg-from) 0%, var(--bg-to) 100%);
+  background: linear-gradient(180deg, var(--gris02) 0%, var(--bg-to) 100%);
   color: var(--gris07);
   -webkit-font-smoothing: antialiased;
 }
@@ -160,14 +188,14 @@ html, body {
 
 .a-title {
   font-family: 'Suisse Int\'l', sans-serif;
-  font-weight: 450;   /* Book */
-  font-size: 30px;
+  font-weight: var(--font-weight-book);   /* Book */
+  font-size: var(--title-title); 
   line-height: 1.05;
   color: var(--gris07);
 }
 
 .a-logo {
-  height: 28px;
+  height: 36px; /* antes 28px*/
   width: auto;
   flex-shrink: 0;
   display: block;
@@ -176,8 +204,8 @@ html, body {
 /* Subtítulo: shortName del modelo activo */
 .a-badge {
   font-family: 'Suisse Int\'l', sans-serif;
-  font-weight: 430;  
-  font-size: 20px;
+  font-weight: var(--font-weight-book);   /* Book */
+  font-size: var(--title-subtitle);
   letter-spacing: 0;
   color: var(--gris07);
   border: none;
@@ -346,8 +374,8 @@ html, body {
 .graph-label {
   font-family: 'Suisse Int\'l', sans-serif;
   /* font-weight: 450;    Book */
-  font-size: 20px;
-  color: var(--gris04);
+  font-size: var(--body-body-S); /* antes 20px*/
+  color: var(--gris07);
 }
 
 .graph-unit {
@@ -362,7 +390,7 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 11px;
+  font-size: var(--title-title-S);
   color: var(--gris04);
   white-space: nowrap;
 }
@@ -424,7 +452,7 @@ html, body {
   padding: 10px 16px;
   border-radius: var(--radius-pill);
   font-family: 'Suisse Int\'l', sans-serif;
-  font-size: 13px;
+  font-size: var(--title-title-M);
   /* font-weight: 400; quitado parecia negrita */
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
