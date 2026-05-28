@@ -9,13 +9,6 @@
 //   · schemeImg:  ruta a imagen .webp del esquema del equipo
 // ═══════════════════════════════════════════════════════════
 
-// colores para el label de la gráfica y variables globales
-const COLORS_LABEL = {
-  blue: "#3033ff",
-  orange: "#FF8300",
-  green: "#97d700",
-  yellow: "#FFEC00"
-};
 
 const MODELS = [
 
@@ -31,9 +24,9 @@ const MODELS = [
     graphLabel: "Line Interactive Chart",
     graphUnit: "PUE · Line Interactive",
     legend: [
-      { label: "POI",   color: COLORS_LABEL.blue },
-      { label: "PE BESS",   color: COLORS_LABEL.orange },
-      { label: "Data Center",   color: COLORS_LABEL.green }
+      { label: "POI",   color: "var(--neonBlue500)"  },
+      { label: "PE BESS",   color: "var(--orange500)" },
+      { label: "Data Center",   color: "var(--mobilityGreen500)" }
     ],
     equipos: [
       {
@@ -59,10 +52,10 @@ const MODELS = [
     graphLabel: "Double Conversion Chart",
     graphUnit: "kW/rack · Load Smoothing Capabilities - sub titulo gráfica 2 lineas",
     legend: [
-      { label: "POI",   color: COLORS_LABEL.blue },
-      { label: "PE BESS GFM",    color: COLORS_LABEL.orange },
-      { label: "Data Center",  color: COLORS_LABEL.green },
-      { label:"PE BESS GFL", color: COLORS_LABEL.yellow }
+      { label: "POI",   color: "var(--neonBlue500)"  },
+      { label: "PE BESS GFM",    color: "var(--orange500)" },
+      { label: "Data Center",  color: "var(--mobilityGreen500)" },
+      { label:"PE BESS GFL", color: "var(--yellow500)" }
     ],
     equipos: [
       {
@@ -88,9 +81,9 @@ const MODELS = [
     graphLabel: "Load Sensing Chart",
     graphUnit: "MWh · Modelo 3",
     legend: [
-      { label: "POI",  color: COLORS_LABEL.blue },
-      { label: "PE BESS",  color: COLORS_LABEL.orange },
-      { label: "Data Center",   color: COLORS_LABEL.green }
+      { label: "POI",  color: "var(--neonBlue500)" },
+      { label: "PE BESS",  color: "var(--orange500)" },
+      { label: "Data Center",   color: "var(--mobilityGreen500)" }
     ],
     equipos: [
       {
@@ -124,9 +117,9 @@ const MODELS = [
     graphLabel: "Hybrid Load Sensing Chart",
     graphUnit: "MW · Modelo 4",
      legend: [
-      { label: "POI",  color: COLORS_LABEL.blue },
-      { label: "PE BESS",  color: COLORS_LABEL.orange },
-      { label: "Data Center",   color: COLORS_LABEL.green }
+      { label: "POI",  color: "var(--neonBlue500)" },
+      { label: "PE BESS",  color: "var(--orange500)" },
+      { label: "Data Center",   color: "var(--mobilityGreen500)" }
     ],
     equipos: [
       {
@@ -160,9 +153,9 @@ const MODELS = [
     graphLabel: "OFF Grid: GT+ BESS BTM Chart",
     graphUnit: "ms · Modelo 5",
      legend: [
-      { label: "Gas Turbine",  color: COLORS_LABEL.blue },
-      { label: "PE BESS",  color: COLORS_LABEL.orange },
-      { label: "Data Center",   color: COLORS_LABEL.green }
+      { label: "Gas Turbine",  color: "var(--neonBlue500)" },
+      { label: "PE BESS",  color: "var(--orange500)" },
+      { label: "Data Center",   color: "var(--mobilityGreen500)" }
       
     ],
     equipos: [
@@ -191,28 +184,28 @@ const MODELS = [
     graphLabel: "800 V Power Supply Chart",
     graphUnit: "% ocupación · Modelo 6",
      legend: [
-      { label: "POI",  color: COLORS_LABEL.blue },
-      { label: "PE BESS",  color: COLORS_LABEL.orange },
-      { label: "Data Center",   color: COLORS_LABEL.green }
+      { label: "POI",  color: "var(--neonBlue500)" },
+      { label: "PE BESS",  color: "var(--orange500)" },
+      { label: "Data Center",   color: "var(--mobilityGreen500)" }
       
     ],
     equipos: [
-      {
+     /*  {
         id: "m6-zone-priv",
         title: "HEM Solar Inverter",
         short: "Converts solar energy into AC power for on-site generation.",
         long: "Converts solar energy into AC power for on-site generation.",
         schemeImg: "./assets/schemes/m6.png",
         focus: { x: 25, y: 40 }
-      },
-      {
+      }, */
+     /*  {
         id: "m6-zone-colo",
         title: "PCSM & Multi PCSM Battery Inverter",
         short: "Manages battery power for backup, peak shaving, and grid support.",
         long: "Manages battery power for backup, peak shaving, and grid support.",
         schemeImg: "./assets/schemes/m6.png",
         focus: { x: 65, y: 45 }
-      },
+      }, */
       {
         id: "m6-zone-colo",
         title: "AIPCS 800 V Power Supply",
