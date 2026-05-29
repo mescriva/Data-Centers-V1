@@ -141,14 +141,14 @@ html, body {
 /*  El render tiene una proporcion de 5:4 y el resto será ocupado por la info+grafica */
 .main {
   display: grid;
-  grid-template-columns: 1182px 1fr;
+  grid-template-columns:  1fr 1182px;
   gap: var(--gap);
   min-height: 0;
 }
 
 /* Intercambio visual de columnas sin tocar el HTML */
-.section-a { grid-column: 2; grid-row: 1; }
-.right-col  { grid-column: 1; grid-row: 1; }
+.right-col  { grid-column: 2; grid-row: 1; }
+.section-a  { grid-column: 1; grid-row: 1; }
 
 /* ── SECCIÓN A — Panel derecho (info + cards) ────────────── */
 .section-a {
@@ -181,7 +181,7 @@ html, body {
 /* Fila: título "Data Centers" (izq) + logo PE (der) */
 .a-title-row {
   display: flex;
-  align-items: center;
+  align-items: top;
   justify-content: space-between;
   gap: 12px;
 }
@@ -195,7 +195,7 @@ html, body {
 }
 
 .a-logo {
-  height: 36px; /* antes 28px*/
+  height: 42px; /* antes 28px*/
   width: auto;
   flex-shrink: 0;
   display: block;
