@@ -224,7 +224,7 @@ const MODELS = [
       },
       {
         id: "m6-noc",
-        title: "XMV670 & XMV670K  SD750FR",
+        title: "XMV670 & XMV670K MV Frequency Drive and SD750FR LV Drive",
         short: "Controls cooling systems with precise medium-voltage motor management. Controls auxiliary pumps and fans for efficient facility operation.",
         long: "Controls cooling systems with precise medium-voltage motor management. Controls auxiliary pumps and fans for efficient facility operation.",
         schemeImg: "./assets/schemes/m6.png",
