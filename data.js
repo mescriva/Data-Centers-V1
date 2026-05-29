@@ -225,8 +225,8 @@ const MODELS = [
       {
         id: "m6-noc",
         title: "XMV670 & XMV670K MV and SD750FR LV Drive",
-        short: "Controls cooling systems with precise medium-voltage motor management.",
-        long: "Controls cooling systems with precise medium-voltage motor management.",
+        short: "Ensure efficient cooling by controlling medium-voltage motors and optimizing pumps and fans.",
+        long: "Ensure efficient cooling by controlling medium-voltage motors and optimizing pumps and fans.",
         schemeImg: "./assets/schemes/m6.png",
         focus: { x: 45, y: 20 }
       }
