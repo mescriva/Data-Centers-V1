@@ -24,7 +24,7 @@ const MODELS = [
     graphLabel: "Line Interactive Chart",
     graphUnit: "PUE · Line Interactive",
     legend: [
-      { label: "POI",   color: "var(--neonBlue500)"  },
+      { label: "POI",   color: "var(--yellow500)"  },
       { label: "PE BESS",   color: "var(--orange500)" },
       { label: "Data Center",   color: "var(--mobilityGreen500)" }
     ],
@@ -52,10 +52,10 @@ const MODELS = [
     graphLabel: "Double Conversion Chart",
     graphUnit: "kW/rack · Load Smoothing Capabilities - sub titulo gráfica 2 lineas",
     legend: [
-      { label: "POI",   color: "var(--neonBlue500)"  },
+      { label: "POI",   color: "var(--yellow500)"  },
       { label: "PE BESS GFM",    color: "var(--orange500)" },
       { label: "Data Center",  color: "var(--mobilityGreen500)" },
-      { label:"PE BESS GFL", color: "var(--yellow500)" }
+      { label:"PE BESS GFL", color: "var(--corporateBlue500)" }
     ],
     equipos: [
       {
@@ -81,7 +81,7 @@ const MODELS = [
     graphLabel: "Load Sensing Chart",
     graphUnit: "MWh · Modelo 3",
     legend: [
-      { label: "POI",  color: "var(--neonBlue500)" },
+      { label: "POI",  color: "var(--yellow500)" },
       { label: "PE BESS",  color: "var(--orange500)" },
       { label: "Data Center",   color: "var(--mobilityGreen500)" }
     ],
@@ -117,7 +117,7 @@ const MODELS = [
     graphLabel: "Hybrid Load Sensing Chart",
     graphUnit: "MW · Modelo 4",
      legend: [
-      { label: "POI",  color: "var(--neonBlue500)" },
+      { label: "POI",  color: "var(--yellow500)" },
       { label: "PE BESS",  color: "var(--orange500)" },
       { label: "Data Center",   color: "var(--mobilityGreen500)" }
     ],
@@ -153,7 +153,7 @@ const MODELS = [
     graphLabel: "OFF Grid: GT+ BESS BTM Chart",
     graphUnit: "ms · Modelo 5",
      legend: [
-      { label: "Gas Turbine",  color: "var(--neonBlue500)" },
+      { label: "Gas Turbine",  color: "var(--yellow500)" },
       { label: "PE BESS",  color: "var(--orange500)" },
       { label: "Data Center",   color: "var(--mobilityGreen500)" }
       
@@ -184,7 +184,7 @@ const MODELS = [
     graphLabel: "800 V Power Supply Chart",
     graphUnit: "% ocupación · Modelo 6",
      legend: [
-      { label: "POI",  color: "var(--neonBlue500)" },
+      { label: "POI",  color: "var(--yellow500)" },
       { label: "PE BESS",  color: "var(--orange500)" },
       { label: "Data Center",   color: "var(--mobilityGreen500)" }
       
