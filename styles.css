@@ -279,7 +279,7 @@ html, body {
 .card-title {
   font-family: 'Suisse Int\'l', sans-serif;
   font-weight: 400;   /* Book */
-  font-size: 14px;
+  font-size: 12px;
   color: var(--gris07);
   white-space: normal; /* no wrap para el titulo en 1 sola linea */
 /*  overflow: hidden;
