@@ -1,7 +1,7 @@
 # Data Centers — Expo Screen MVP
 
 Pantalla interactiva para exposición comercial de modelos de Data Center.
-Feria Solar & Storage. Versión con textos oscuros.
+Feria Clean Power. Versión con navegador izquierdo, textos oscuros y nuevos renders.
 
 ## Iniciar el Data Centers Screen
 
