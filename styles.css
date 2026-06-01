@@ -261,7 +261,7 @@ html, body {
 }
 
 .card-desc {
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.4;
   color: var(--gris04);
   font-weight: 400;
